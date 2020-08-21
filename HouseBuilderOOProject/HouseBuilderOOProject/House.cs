@@ -7,24 +7,43 @@ using System.Threading.Tasks;
 namespace HouseBuilderOOProject {
     class House {
 
-        public int houseNumber;
-        public string houseName;
+        private int houseNumber;
+        private string houseName;
 
-        public List<Room> rooms;
+        private List<Room> rooms;
 
         public House() {
-            houseNumber = 1;
-            houseName = "";
+            HouseNumber = 1;
+            HouseName = "";
 
             rooms = new List<Room>();
         }
 
         public House(int newNumber, string newName) {
-            houseNumber = newNumber;
-            houseName = newName;
+            HouseNumber = newNumber;
+            HouseName = newName;
 
             rooms = new List<Room>();
         }
 
+        public int HouseNumber {
+            get { return houseNumber; }
+            set { houseNumber = value;  }
+        }
+
+        public string HouseName {
+            get { return houseName; }
+            set { houseName = value;  }
+        }
+
+        public List<Room> Rooms {
+            get { return rooms;  }
+        }
+
+        private addRoom(Room newRoom) {
+            if (newRoom != null) {
+                rooms.Add(newRoom);
+            }
+        }
     }
 }

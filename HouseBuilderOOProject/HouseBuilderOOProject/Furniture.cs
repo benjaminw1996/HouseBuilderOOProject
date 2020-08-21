@@ -7,14 +7,19 @@ using System.Threading.Tasks;
 namespace HouseBuilderOOProject {
     class Furniture {
 
-        string furnitureName;
+        private string furnitureName;
 
         public Furniture() {
             furnitureName = "";
         }
 
         public Furniture(string newFurnitureName) {
-            furnitureName = newFurnitureName;
+            FurnitureName = newFurnitureName;
+        }
+
+        public string FurnitureName {
+            get { return furnitureName; }
+            set { furnitureName = value; }
         }
     }
 }

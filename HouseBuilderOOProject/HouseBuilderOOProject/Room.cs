@@ -7,20 +7,35 @@ using System.Threading.Tasks;
 namespace HouseBuilderOOProject {
     class Room {
 
-        public RoomType roomType;
+        private RoomType m_RoomType;
 
-        public List<Furniture> furniture;
+        private List<Furniture> m_Furniture;
 
         public Room() {
-            roomType = RoomType.none;
+            M_RoomType = RoomType.none;
 
-            furniture = new List<Furniture>();
+            m_Furniture = new List<Furniture>();
         }
 
         public Room(RoomType newRoomType) {
             roomType = newRoomType;
 
             furniture = new List<Furniture>();
+        }
+
+        public RoomType M_RoomType {
+            get { return m_RoomType; }
+            set { m_RoomType = value; }
+        }
+
+        public List<Furniture> M_Furniture {
+            get { return m_Furniture; }
+        }
+
+        private addFurniture(Furniture newFurniture) {
+            if (newFurniture != null) {
+                m_Furniture.Add(newFurniture);
+            }
         }
     }
 }
