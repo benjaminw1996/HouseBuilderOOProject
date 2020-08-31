@@ -25,9 +25,9 @@ namespace HouseBuilderOOProject {
         /// </summary>
         /// <param name="newRoomType">Value for the house number given by the user</param>
         public Room(RoomType newRoomType) {
-            roomType = newRoomType;
+            m_RoomType = newRoomType;
 
-            furniture = new List<Furniture>();
+            m_Furniture = new List<Furniture>();
         }
 
         //Get/Set for the RoomType
@@ -42,7 +42,7 @@ namespace HouseBuilderOOProject {
         }
 
         //Method for adding furniture to the list
-        private addFurniture(Furniture newFurniture) {
+        private void addFurniture(Furniture newFurniture) {
             if (newFurniture != null) {
                 m_Furniture.Add(newFurniture);
             }

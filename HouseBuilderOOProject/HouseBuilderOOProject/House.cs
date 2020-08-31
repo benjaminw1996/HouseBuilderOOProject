@@ -52,7 +52,7 @@ namespace HouseBuilderOOProject {
         }
 
         //Method for adding rooms to the list
-        private addRoom(Room newRoom) {
+        private void addRoom(Room newRoom) {
             if (newRoom != null) {
                 rooms.Add(newRoom);
             }
