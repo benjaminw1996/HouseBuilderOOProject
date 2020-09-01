@@ -20,7 +20,10 @@ namespace HouseBuilderOOProject {
 
             //This loop is used to run the program until the user wishes to exit, this option is given at the end of the loop
             while (run) {
-                CreateNewHouse();
+                tempHouse = new House();
+                tempHouse = CreateNewHouse();
+
+                tempHouse.CreateRoom();
 
                 Console.Write("\nWould you like to make another house? (y/n) ");
                 userResponse = Console.ReadLine().ToLower();
@@ -42,7 +45,7 @@ namespace HouseBuilderOOProject {
         /// This method is used to create a new House object,
         /// The user will be prompted for a name and number for the new house.
         /// </summary>
-        static private void CreateNewHouse() {
+        static private House CreateNewHouse() {
             //Variables for the new house number and name
             int houseNumber = 0;
             string houseName = "";
@@ -85,6 +88,8 @@ namespace HouseBuilderOOProject {
             //A new house object is created using the values inputted by the user, this is then added to the list of houses*
             House newHouse = new House(houseNumber, houseName);
             houses.Add(newHouse);
+
+            return newHouse;
         }
 
         /// <summary>

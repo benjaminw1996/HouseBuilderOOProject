@@ -57,5 +57,64 @@ namespace HouseBuilderOOProject {
                 rooms.Add(newRoom);
             }
         }
+
+        /// <summary>
+        /// This method is used to create rooms for the house
+        /// The user is asked for the type of room they'd like to create, this is then checked through using a switch case.
+        /// </summary>
+        public void CreateRoom() {
+            //Local variables to use throughout the function
+            bool run = true;
+            string userReply;
+            RoomType roomType = RoomType.none;
+            Room newRoom = null;
+
+            //This loop will run until the user gives a valid RoomType for the new room
+            while (run) {
+                //The user is prompted to select a type for the new room from the given list
+                Console.Write("Please select a room type for the new room; 1. Kitchen, 2. Living Room, 3. Bathroom, 4. Bedroom, 5. Dining Room - ");
+                userReply = Console.ReadLine();
+
+                //This switch case goes through all the possible options and creates a new room with the selected type
+                switch (userReply) {
+                    case "1":
+                        roomType = RoomType.Kitchen;
+                        run = false;
+                        break;
+                    case "2":
+                        roomType = RoomType.LivingRoom;
+                        run = false;
+                        break;
+                    case "3":
+                        roomType = RoomType.Bathroom;
+                        run = false;
+                        break;
+                    case "4":
+                        roomType = RoomType.Bedroom;
+                        run = false;
+                        break;
+                    case "5":
+                        roomType = RoomType.DiningRoom;
+                        run = false;
+                        break;
+                    default:
+                        Console.WriteLine("Unknown option selected, please try again.");
+                        break;
+                }
+            }
+
+            //If the room type is valid the room is made, if not the user is informed the room could not be created
+            if (roomType != RoomType.none) {
+                newRoom = new Room(roomType);
+            } else {
+                Console.WriteLine("New room could not be created, please try again.");
+            }
+
+            //If the new room is not null it is added to the list of rooms for the house
+            if(newRoom != null) {
+                addRoom(newRoom);
+                Console.WriteLine("A new " + roomType + " was created and added to the house.");
+            }
+        }
     }
 }
