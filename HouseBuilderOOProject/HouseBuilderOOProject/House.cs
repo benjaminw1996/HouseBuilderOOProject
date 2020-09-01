@@ -122,7 +122,19 @@ namespace HouseBuilderOOProject {
             //If the new room is not null it is added to the list of rooms for the house
             if(newRoom != null) {
                 AddRoom(newRoom);
-                Console.WriteLine("\nA new " + roomType + " was created and added to the house.");
+                Console.WriteLine("\nA new " + roomType + " was created and added to the house.\nThis room contains the following furniture -");
+                newRoom.DisplayFurniture();
+            }
+        }
+
+        /// <summary>
+        /// This method loops through the rooms in the house and displays their room type and then calls the display furniture method of each room
+        /// this then displays all the furniture in that room.
+        /// </summary>
+        public void DisplayRooms() {
+            foreach(Room room in rooms) {
+                Console.WriteLine("\t" + room.M_RoomType + "\n\tThat contains the following furniture - ");
+                room.DisplayFurniture();
             }
         }
     }
