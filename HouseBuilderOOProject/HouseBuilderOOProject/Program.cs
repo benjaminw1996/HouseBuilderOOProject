@@ -13,9 +13,12 @@ namespace HouseBuilderOOProject {
         static void Main(string[] args) {
             Console.WriteLine("Hello, here's to a new beginning...");
 
+            //Local variables to use during the running of the program
             bool run = true;
-            string userResponse = "";
+            string userResponse;
+            House tempHouse;
 
+            //This loop is used to run the program until the user wishes to exit, this option is given at the end of the loop
             while (run) {
                 CreateNewHouse();
 
@@ -23,7 +26,9 @@ namespace HouseBuilderOOProject {
                 userResponse = Console.ReadLine().ToLower();
                 if (userResponse == "n" || userResponse == "no") {
                     run = false;
-                } else {
+                }else if (userResponse == "y" || userResponse == "yes") {
+                    run = true;
+                }else {
                     Console.WriteLine("Answer was not recognised...program will exit.");
                     run = false;
                 }
@@ -91,13 +96,13 @@ namespace HouseBuilderOOProject {
         /// <returns>The method returns a boolean value, true if the name/number is in use or false if not.</returns>
         static private bool CheckInUse(int houseNumber, string houseName) {
             bool exists = false;
-            
+
+            //The list of houses is looped through to see if the desired name or number is already in use, if the name is in use the loops exits and true is returned
             foreach (House house in houses) {
-                if(houseName == "") {
-                    if(house.HouseNumber == houseNumber) {
+                //If the name given is empty then the number is compared, else the name is compared
+                if(houseName == "" && house.HouseNumber == houseNumber) {
                         exists = true;
                         break;
-                    }
                 } else {
                     if(house.HouseName == houseName) {
                         exists = true;
@@ -107,6 +112,28 @@ namespace HouseBuilderOOProject {
             }
 
             return exists;
+        }
+
+        /// <summary>
+        /// This method is used to find a house given its name or number.
+        /// </summary>
+        /// <param name="houseNumber">Number of a house to find.</param>
+        /// <param name="houseName">Name of a house to find.</param>
+        /// <returns>The house object that was found in the list of houses.</returns>
+        static private House FindHouse(int houseNumber, string houseName) {
+            House tempHouse = null;
+
+            //The list of houses is looped through, the given name or number is then compared to locate the desired house object
+            foreach (House house in houses) {
+                if(houseName == "" && houseNumber == house.HouseNumber) {
+                    tempHouse = house;
+                }else if (houseName == house.HouseName) {
+                    tempHouse = house;
+                }
+            }
+
+            //The located house object is then returned, null is returned if no house was found with the name/number.
+            return tempHouse;
         }
     }
 }
