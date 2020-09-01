@@ -39,7 +39,7 @@ namespace HouseBuilderOOProject {
                     //If the house number is 0 then the user is informed that it must be above 0, if it is above 0 then is checked against the existing house numbers as duplicates arnt allowed
                     if (houseNumber == 0) {
                         Console.WriteLine("The house number must be above 0.");
-                    } else if(CheckHouseNumber(houseNumber) == false) {
+                    } else if(CheckInUse(houseNumber,"") == false) {
                         break;
                     } else {
                         Console.WriteLine("That house number is already in use.");
@@ -56,7 +56,7 @@ namespace HouseBuilderOOProject {
                 houseName = Console.ReadLine();
 
                 //The new name is checked against the existing names as duplicates arnt allowed
-                if(CheckHouseName(houseName) == false) {
+                if(CheckInUse(0,houseName) == false) {
                     break;
                 } else {
                     Console.WriteLine("That house name is already in use.");
@@ -105,6 +105,33 @@ namespace HouseBuilderOOProject {
             }
 
             //The result of the check is returned
+            return exists;
+        }
+
+        /// <summary>
+        /// This method is used to check if a house name or number is already in use by another house.
+        /// If the method is called and given an empty house name then the check is performed on the number, else it checks the name instead.
+        /// </summary>
+        /// <param name="houseNumber">The house number to check.</param>
+        /// <param name="houseName">The house name to check, give "" if you want to check the number instead.</param>
+        /// <returns>The method returns a boolean value, true if the name/number is in use or false if not.</returns>
+        static private bool CheckInUse(int houseNumber, string houseName) {
+            bool exists = false;
+            
+            foreach (House house in houses) {
+                if(houseName == "") {
+                    if(house.HouseNumber == houseNumber) {
+                        exists = true;
+                        break;
+                    }
+                } else {
+                    if(house.HouseName == houseName) {
+                        exists = true;
+                        break;
+                    }
+                }
+            }
+
             return exists;
         }
     }
