@@ -13,7 +13,21 @@ namespace HouseBuilderOOProject {
         static void Main(string[] args) {
             Console.WriteLine("Hello, here's to a new beginning...");
 
-            CreateNewHouse();
+            bool run = true;
+            string userResponse = "";
+
+            while (run) {
+                CreateNewHouse();
+
+                Console.Write("\nWould you like to make another house? (y/n) ");
+                userResponse = Console.ReadLine().ToLower();
+                if (userResponse == "n" || userResponse == "no") {
+                    run = false;
+                } else {
+                    Console.WriteLine("Answer was not recognised...program will exit.");
+                    run = false;
+                }
+            }
 
             Console.Write("\nPress any key to end program...");
             Console.ReadKey();
@@ -66,46 +80,6 @@ namespace HouseBuilderOOProject {
             //A new house object is created using the values inputted by the user, this is then added to the list of houses*
             House newHouse = new House(houseNumber, houseName);
             houses.Add(newHouse);
-        }
-
-        /// <summary>
-        /// This method checks if the given house number is already in use by another house.
-        /// </summary>
-        /// <param name="houseNumber">The method is given a house number to check.</param>
-        /// <returns>The method returns a boolean value, true if the number is in use or false if not.</returns>
-        static private bool CheckHouseNumber(int houseNumber) {
-            bool exists = false;
-
-            //The list of houses is looped through, and for each house the given number is checked against the existing number.
-            foreach(House house in houses) {
-                if(house.HouseNumber == houseNumber) {
-                    exists = true;
-                    break;
-                }
-            }
-
-            //The result of the check is returned
-            return exists;
-        }
-
-        /// <summary>
-        /// This method checks if the given house name is already in use by another house.
-        /// </summary>
-        /// <param name="houseName">The method is given a house nameto check.</param>
-        /// <returns>The method returns a boolean value, true if the name is in use or false if not.</returns>
-        static private bool CheckHouseName(string houseName) {
-            bool exists = false;
-
-            //The list of houses is looped through, and for each house the given name is checked against the existing name.
-            foreach (House house in houses) {
-                if (house.HouseName == houseName) {
-                    exists = true;
-                    break;
-                }
-            }
-
-            //The result of the check is returned
-            return exists;
         }
 
         /// <summary>
