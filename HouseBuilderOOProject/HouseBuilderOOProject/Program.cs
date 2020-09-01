@@ -15,6 +15,7 @@ namespace HouseBuilderOOProject {
 
             //Local variables to use during the running of the program
             bool run = true;
+            bool creatingRooms = true;
             string userResponse;
             House tempHouse;
 
@@ -23,18 +24,15 @@ namespace HouseBuilderOOProject {
                 tempHouse = new House();
                 tempHouse = CreateNewHouse();
 
-                tempHouse.CreateRoom();
+                while (creatingRooms) {
+                    tempHouse.CreateRoom();
+
+                    Console.Write("\nWould you like to make another room? (y/n) ");
+                    creatingRooms = ContinueLoop();
+                }
 
                 Console.Write("\nWould you like to make another house? (y/n) ");
-                userResponse = Console.ReadLine().ToLower();
-                if (userResponse == "n" || userResponse == "no") {
-                    run = false;
-                }else if (userResponse == "y" || userResponse == "yes") {
-                    run = true;
-                }else {
-                    Console.WriteLine("Answer was not recognised...program will exit.");
-                    run = false;
-                }
+                run = ContinueLoop();
             }
 
             Console.Write("\nPress any key to end program...");
@@ -139,6 +137,31 @@ namespace HouseBuilderOOProject {
 
             //The located house object is then returned, null is returned if no house was found with the name/number.
             return tempHouse;
+        }
+
+
+        /// <summary>
+        /// This method is used by the while loops to determine whether the user wishes to exit from them.
+        /// The loop looks at the user response and returns a bool that corresponds to their response.
+        /// </summary>
+        /// <returns>A bool that states whether the loop should continue or not.</returns>
+        static private bool ContinueLoop() {
+            bool keepLooping = true;
+            //This string holds the users response to the given question
+            string userResponse = Console.ReadLine().ToLower();
+
+            //These if/else statements look at the users response to determine if they wish to continue or not with the loop
+            if (userResponse == "n" || userResponse == "no") {
+                keepLooping = false;
+            } else if (userResponse == "y" || userResponse == "yes") {
+                keepLooping = true;
+            } else {
+                Console.WriteLine("Answer was not recognised...program will exit.");
+                keepLooping = false;
+            }
+
+            //The result of the if/esle statements is returned
+            return keepLooping;
         }
     }
 }
