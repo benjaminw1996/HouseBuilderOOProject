@@ -52,7 +52,7 @@ namespace HouseBuilderOOProject {
         }
 
         //Method for adding rooms to the list
-        private void addRoom(Room newRoom) {
+        private void AddRoom(Room newRoom) {
             if (newRoom != null) {
                 rooms.Add(newRoom);
             }
@@ -106,14 +106,23 @@ namespace HouseBuilderOOProject {
             //If the room type is valid the room is made, if not the user is informed the room could not be created
             if (roomType != RoomType.none) {
                 newRoom = new Room(roomType);
+
+                run = true;
+                while (run) {
+                    newRoom.CreateFurniture();
+
+                    Console.Write("Would you like to add more furniture to the room? (y/n) ");
+                    run = Utilities.ContinueLoop();
+                }
+
             } else {
                 Console.WriteLine("New room could not be created, please try again.");
             }
 
             //If the new room is not null it is added to the list of rooms for the house
             if(newRoom != null) {
-                addRoom(newRoom);
-                Console.WriteLine("A new " + roomType + " was created and added to the house.");
+                AddRoom(newRoom);
+                Console.WriteLine("\nA new " + roomType + " was created and added to the house.");
             }
         }
     }
