@@ -15,33 +15,30 @@ namespace HouseBuilderOOProject {
 
             //Local variables to use during the running of the program
             bool run = true;
-            bool creatingRooms = true;
             string userResponse;
-            House tempHouse;
 
             //Displaying to the user how many houses there are currently existing
             Console.WriteLine("There are currently " + houses.Count + " houses.");
 
             //This loop is used to run the program until the user wishes to exit, this option is given at the end of the loop
             while (run) {
-                Console.WriteLine("Please select and action to perform - \n\t1. Create a new house.\n\t2. End the program.");
+                Console.WriteLine("\nHere are the actions you can perform - \n\t1. Create a new house.\n\t2. Remove a house.\n\t3. End the program.");
+                Console.Write("Please select an action to perform - ");
                 userResponse = Console.ReadLine();
 
                 switch (userResponse) {
                     case "1":
-                        tempHouse = new House();
-                        tempHouse = CreateNewHouse();
-
-                        while (creatingRooms) {
-                            tempHouse.CreateRoom();
-
-                            Console.Write("\nWould you like to make another room? (y/n) ");
-                            creatingRooms = Utilities.ContinueLoop(); ;
-                        }
+                        CreateNewHouse();
                         break;
+
                     case "2":
+                        RemoveHouse();
+                        break;
+
+                    case "3":
                         run = false;
                         break;
+
                     default:
                         Console.WriteLine("\nUnknown option selected!\n");
                         break;
@@ -59,10 +56,11 @@ namespace HouseBuilderOOProject {
         /// This method is used to create a new House object,
         /// The user will be prompted for a name and number for the new house.
         /// </summary>
-        static private House CreateNewHouse() {
+        static private void CreateNewHouse() {
             //Variables for the new house number and name
-            int houseNumber = 0;
-            string houseName = "";
+            int houseNumber;
+            string houseName;
+            bool creatingRooms = true;
 
             //This loop is used to repeat the new house number prompt until the user inputs a valid number
             while (true) {
@@ -75,7 +73,7 @@ namespace HouseBuilderOOProject {
                     //If the house number is 0 then the user is informed that it must be above 0, if it is above 0 then is checked against the existing house numbers as duplicates arnt allowed
                     if (houseNumber == 0) {
                         Console.WriteLine("The house number must be above 0.");
-                    } else if (CheckInUse(houseNumber,"") == false) {
+                    } else if (CheckInUse(houseNumber, "") == false) {
                         break;
                     } else {
                         Console.WriteLine("That house number is already in use.");
@@ -101,9 +99,15 @@ namespace HouseBuilderOOProject {
 
             //A new house object is created using the values inputted by the user, this is then added to the list of houses*
             House newHouse = new House(houseNumber, houseName);
-            houses.Add(newHouse);
 
-            return newHouse;
+            while (creatingRooms) {
+                newHouse.CreateRoom();
+
+                Console.Write("\nWould you like to make another room? (y/n) ");
+                creatingRooms = Utilities.ContinueLoop(); ;
+            }
+
+            houses.Add(newHouse);
         }
 
         /// <summary>
@@ -153,6 +157,46 @@ namespace HouseBuilderOOProject {
 
             //The located house object is then returned, null is returned if no house was found with the name/number.
             return tempHouse;
+        }
+
+        /// <summary>
+        /// This method is used to remove houses from the list. The user is shown the list of house numbers and names, they are then prompted to enter the number of the house they
+        /// wish to remove. Checks are performed on the number entered to ensure it is indeed a number. 
+        /// The user is informed if the house could be removed or not.
+        /// </summary>
+        static private void RemoveHouse() {
+            //Local variables to use within the method
+            int houseNumber;
+            House houseToRemove;
+            
+            //The user is shown the list of numbers and names of the current houses
+            Console.WriteLine("\nHere is the list of the current houses -");
+
+            foreach (House house in houses) {
+                Console.WriteLine("\tNumber " + house.HouseNumber + " " + house.HouseName +"\n");
+            }
+
+            //The user is then prompted to enter the number of the house they wish to remove, the number is checked to ensure its a number and it repeats until a valid number is entered
+            while (true) {
+                Console.Write("Please enter the house number of the house you wish to remove - ");
+
+                try {
+                    houseNumber = Int32.Parse(Console.ReadLine(), NumberStyles.None);
+                    break;
+                } catch {
+                    Console.WriteLine("That is not a valid house number.");
+                }
+            }
+
+            //The house which they wish to remove is located
+            houseToRemove = FindHouse(houseNumber, "");
+            //If the house exists then it is removed and the user is informed it was successful, if it doesnt then the user is told no house could be removed
+            if (houseToRemove != null) { 
+                houses.Remove(houseToRemove);
+                Console.WriteLine("\nThe house was successfully removed.\n");
+            } else {
+                Console.WriteLine("\nNo house was found to remove, please try again.\n");
+            }
         }
 
         /// <summary>
