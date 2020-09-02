@@ -11,7 +11,7 @@ namespace HouseBuilderOOProject {
         public static List<House> houses = new List<House>();
 
         static void Main(string[] args) {
-            Console.WriteLine("Hello, here's to a new beginning...");
+            //Console.WriteLine("Hello, here's to a new beginning...");
 
             //Local variables to use during the running of the program
             bool run = true;
@@ -19,23 +19,36 @@ namespace HouseBuilderOOProject {
             string userResponse;
             House tempHouse;
 
+            //Displaying to the user how many houses there are currently existing
+            Console.WriteLine("There are currently " + houses.Count + " houses.");
+
             //This loop is used to run the program until the user wishes to exit, this option is given at the end of the loop
             while (run) {
-                tempHouse = new House();
-                tempHouse = CreateNewHouse();
+                Console.WriteLine("Please select and action to perform - \n\t1. Create a new house.\n\t2. End the program.");
+                userResponse = Console.ReadLine();
 
-                while (creatingRooms) {
-                    tempHouse.CreateRoom();
+                switch (userResponse) {
+                    case "1":
+                        tempHouse = new House();
+                        tempHouse = CreateNewHouse();
 
-                    Console.Write("\nWould you like to make another room? (y/n) ");
-                    creatingRooms = Utilities.ContinueLoop(); ;
+                        while (creatingRooms) {
+                            tempHouse.CreateRoom();
+
+                            Console.Write("\nWould you like to make another room? (y/n) ");
+                            creatingRooms = Utilities.ContinueLoop(); ;
+                        }
+                        break;
+                    case "2":
+                        run = false;
+                        break;
+                    default:
+                        Console.WriteLine("\nUnknown option selected!\n");
+                        break;
                 }
-
-                Console.Write("\nWould you like to make another house? (y/n) ");
-                run = Utilities.ContinueLoop(); ;
             }
 
-            Console.WriteLine("You created the following houses - ");
+            Console.WriteLine("\nYou created the following houses - ");
             DisplayHouses();
 
             Console.Write("\nPress any key to end program...");
