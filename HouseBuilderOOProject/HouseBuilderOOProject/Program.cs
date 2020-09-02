@@ -35,6 +35,9 @@ namespace HouseBuilderOOProject {
                 run = Utilities.ContinueLoop(); ;
             }
 
+            Console.WriteLine("You created the following houses - ");
+            DisplayHouses();
+
             Console.Write("\nPress any key to end program...");
             Console.ReadKey();
         }
@@ -59,7 +62,7 @@ namespace HouseBuilderOOProject {
                     //If the house number is 0 then the user is informed that it must be above 0, if it is above 0 then is checked against the existing house numbers as duplicates arnt allowed
                     if (houseNumber == 0) {
                         Console.WriteLine("The house number must be above 0.");
-                    } else if(CheckInUse(houseNumber,"") == false) {
+                    } else if (CheckInUse(houseNumber,"") == false) {
                         break;
                     } else {
                         Console.WriteLine("That house number is already in use.");
@@ -76,7 +79,7 @@ namespace HouseBuilderOOProject {
                 houseName = Console.ReadLine();
 
                 //The new name is checked against the existing names as duplicates arnt allowed
-                if(CheckInUse(0,houseName) == false) {
+                if (CheckInUse(0,houseName) == false) {
                     break;
                 } else {
                     Console.WriteLine("That house name is already in use.");
@@ -103,11 +106,11 @@ namespace HouseBuilderOOProject {
             //The list of houses is looped through to see if the desired name or number is already in use, if the name is in use the loops exits and true is returned
             foreach (House house in houses) {
                 //If the name given is empty then the number is compared, else the name is compared
-                if(houseName == "" && house.HouseNumber == houseNumber) {
+                if (houseName == "" && house.HouseNumber == houseNumber) {
                         exists = true;
                         break;
                 } else {
-                    if(house.HouseName == houseName) {
+                    if (house.HouseName == houseName) {
                         exists = true;
                         break;
                     }
@@ -128,7 +131,7 @@ namespace HouseBuilderOOProject {
 
             //The list of houses is looped through, the given name or number is then compared to locate the desired house object
             foreach (House house in houses) {
-                if(houseName == "" && houseNumber == house.HouseNumber) {
+                if (houseName == "" && houseNumber == house.HouseNumber) {
                     tempHouse = house;
                 }else if (houseName == house.HouseName) {
                     tempHouse = house;
@@ -137,6 +140,16 @@ namespace HouseBuilderOOProject {
 
             //The located house object is then returned, null is returned if no house was found with the name/number.
             return tempHouse;
+        }
+
+        /// <summary>
+        /// This method loops through the list of houses and displays the contents, each house displays its rooms which in turn display their furniture.
+        /// </summary>
+        static private void DisplayHouses() {
+            foreach (House house in houses) {
+                Console.WriteLine("Number " + house.HouseNumber + " " + house.HouseName + "\nThis house contains the following rooms - ");
+                house.DisplayRooms();
+            }
         }
     }
 }

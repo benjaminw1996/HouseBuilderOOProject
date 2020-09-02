@@ -132,8 +132,8 @@ namespace HouseBuilderOOProject {
         /// this then displays all the furniture in that room.
         /// </summary>
         public void DisplayRooms() {
-            foreach(Room room in rooms) {
-                Console.WriteLine("\t" + room.M_RoomType + "\n\tThat contains the following furniture - ");
+            foreach (Room room in rooms) {
+                Console.WriteLine("\t\n" + room.M_RoomType + "\n\tThat contains the following furniture - ");
                 room.DisplayFurniture();
             }
         }

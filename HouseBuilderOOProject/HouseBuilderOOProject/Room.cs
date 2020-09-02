@@ -70,7 +70,7 @@ namespace HouseBuilderOOProject {
         /// This method loops through the list of furniture and displays the contents to the console app.
         /// </summary>
         public void DisplayFurniture() {
-            foreach(Furniture furniture in m_Furniture) {
+            foreach (Furniture furniture in m_Furniture) {
                 Console.WriteLine("\t\t" + furniture.FurnitureName);
             }
         }
