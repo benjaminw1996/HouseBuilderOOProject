@@ -47,6 +47,7 @@ namespace HouseBuilderOOProject {
                         break;
 
                     case "4":
+                        Exit();
                         run = false;
                         break;
 
@@ -268,6 +269,24 @@ namespace HouseBuilderOOProject {
                 Console.WriteLine("There was an error when attempting to load the houses, please try again.");
 
             }
+        }
+
+        /// <summary>
+        /// This method is used to give the user the option to save their houses before they end the program.
+        /// </summary>
+        private static void Exit() {
+            bool save;
+            //The user is asked if they wish to save their houses
+            Console.Write("Would you like to save the list of houses before you end the program? (y/n) - ");
+            //The utilities continue loop method is used to process their response
+            save = Utilities.ContinueLoop();
+
+            //If they wish to save then the save method is called
+            if (save == true) {
+                SaveHouses();
+            }
+
+            Console.WriteLine("The program will now end.");
         }
     }
 }
