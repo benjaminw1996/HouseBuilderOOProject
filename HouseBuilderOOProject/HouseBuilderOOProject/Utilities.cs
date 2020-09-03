@@ -8,7 +8,7 @@ namespace HouseBuilderOOProject {
     public static class Utilities {
 
         public static bool ContinueLoop() {
-            bool keepLooping = true;
+            bool keepLooping;
             //This string holds the users response to the given question
             string userResponse = Console.ReadLine().ToLower();
 

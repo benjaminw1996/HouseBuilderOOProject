@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.IO;
 
 namespace HouseBuilderOOProject {
     class Program {
@@ -22,7 +25,7 @@ namespace HouseBuilderOOProject {
 
             //This loop is used to run the program until the user wishes to exit, this option is given at the end of the loop
             while (run) {
-                Console.WriteLine("\nHere are the actions you can perform - \n\t1. Create a new house.\n\t2. Remove a house.\n\t3. End the program.");
+                Console.WriteLine("\nHere are the actions you can perform - \n\t1. Create a new house.\n\t2. Remove a house.\n\t3. Save the houses.\n\t4. End the program.");
                 Console.Write("Please select an action to perform - ");
                 userResponse = Console.ReadLine();
 
@@ -36,6 +39,10 @@ namespace HouseBuilderOOProject {
                         break;
 
                     case "3":
+                        SaveHouses();
+                        break;
+
+                    case "4":
                         run = false;
                         break;
 
@@ -56,7 +63,7 @@ namespace HouseBuilderOOProject {
         /// This method is used to create a new House object,
         /// The user will be prompted for a name and number for the new house.
         /// </summary>
-        static private void CreateNewHouse() {
+        private static void CreateNewHouse() {
             //Variables for the new house number and name
             int houseNumber;
             string houseName;
@@ -117,7 +124,7 @@ namespace HouseBuilderOOProject {
         /// <param name="houseNumber">The house number to check.</param>
         /// <param name="houseName">The house name to check, give "" if you want to check the number instead.</param>
         /// <returns>The method returns a boolean value, true if the name/number is in use or false if not.</returns>
-        static private bool CheckInUse(int houseNumber, string houseName) {
+        private static bool CheckInUse(int houseNumber, string houseName) {
             bool exists = false;
 
             //The list of houses is looped through to see if the desired name or number is already in use, if the name is in use the loops exits and true is returned
@@ -143,7 +150,7 @@ namespace HouseBuilderOOProject {
         /// <param name="houseNumber">Number of a house to find.</param>
         /// <param name="houseName">Name of a house to find.</param>
         /// <returns>The house object that was found in the list of houses.</returns>
-        static private House FindHouse(int houseNumber, string houseName) {
+        private static House FindHouse(int houseNumber, string houseName) {
             House tempHouse = null;
 
             //The list of houses is looped through, the given name or number is then compared to locate the desired house object
@@ -164,7 +171,7 @@ namespace HouseBuilderOOProject {
         /// wish to remove. Checks are performed on the number entered to ensure it is indeed a number. 
         /// The user is informed if the house could be removed or not.
         /// </summary>
-        static private void RemoveHouse() {
+        private static void RemoveHouse() {
             //Local variables to use within the method
             int houseNumber;
             House houseToRemove;
@@ -202,10 +209,37 @@ namespace HouseBuilderOOProject {
         /// <summary>
         /// This method loops through the list of houses and displays the contents, each house displays its rooms which in turn display their furniture.
         /// </summary>
-        static private void DisplayHouses() {
+        private static void DisplayHouses() {
             foreach (House house in houses) {
                 Console.WriteLine("Number " + house.HouseNumber + " " + house.HouseName + "\nThis house contains the following rooms - ");
                 house.DisplayRooms();
+            }
+        }
+
+        /// <summary>
+        /// This method is converts the list of houses to a json file format, then saves that to a txt document in the project folder.
+        /// </summary>
+        private static void SaveHouses() {
+            string housesJsonFile;
+            string filePath = @"C:\Users\Benjamin\Documents\Visual Studio 2019\Projects\HouseBuilderOOProject\HouseBuilderOOProject\Houses.txt";
+
+            //The JsonSerialiser converts the list of houses into json data that can then be used to rebuild the list of houses later on
+            housesJsonFile = JsonSerializer.Serialize(houses);
+
+            //The try catch block is used to catch a potential error that may occur if someone other than the author runs the code
+            try {
+                //The file is saved, and if successful then the user is informed of this
+                File.WriteAllText(filePath, housesJsonFile);
+                Console.WriteLine("The houses were saved.");
+
+            } catch (DirectoryNotFoundException) {
+
+                Console.WriteLine("Invalid file path, please check that the hard coded file path is written to find your hard drive and documents.");
+
+            } catch {
+
+                Console.WriteLine("There was an error when attempting to save the houses, please try again.");
+
             }
         }
     }
