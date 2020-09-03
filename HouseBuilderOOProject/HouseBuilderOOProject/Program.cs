@@ -12,6 +12,8 @@ namespace HouseBuilderOOProject {
     class Program {
 
         public static List<House> houses = new List<House>();
+        public static string housesJsonFile;
+        public static string filePath = @"C:\Users\Benjamin\Documents\Visual Studio 2019\Projects\HouseBuilderOOProject\HouseBuilderOOProject\Houses.txt";
 
         static void Main(string[] args) {
             //Console.WriteLine("Hello, here's to a new beginning...");
@@ -19,6 +21,8 @@ namespace HouseBuilderOOProject {
             //Local variables to use during the running of the program
             bool run = true;
             string userResponse;
+
+            LoadHouses();
 
             //Displaying to the user how many houses there are currently existing
             Console.WriteLine("There are currently " + houses.Count + " houses.");
@@ -217,12 +221,9 @@ namespace HouseBuilderOOProject {
         }
 
         /// <summary>
-        /// This method is converts the list of houses to a json file format, then saves that to a txt document in the project folder.
+        /// This method converts the list of houses to a json file format, then saves that to a txt document in the project folder.
         /// </summary>
         private static void SaveHouses() {
-            string housesJsonFile;
-            string filePath = @"C:\Users\Benjamin\Documents\Visual Studio 2019\Projects\HouseBuilderOOProject\HouseBuilderOOProject\Houses.txt";
-
             //The JsonSerialiser converts the list of houses into json data that can then be used to rebuild the list of houses later on
             housesJsonFile = JsonSerializer.Serialize(houses);
 
@@ -233,12 +234,38 @@ namespace HouseBuilderOOProject {
                 Console.WriteLine("The houses were saved.");
 
             } catch (DirectoryNotFoundException) {
-
+                //This occurs if the path to the file is not valid, this probably is due to the path being hard coded for my personal computer
                 Console.WriteLine("Invalid file path, please check that the hard coded file path is written to find your hard drive and documents.");
 
             } catch {
 
                 Console.WriteLine("There was an error when attempting to save the houses, please try again.");
+
+            }
+        }
+
+        /// <summary>
+        /// This method is used to load in a list of houses from a specific text file, the list is stored as json data.
+        /// </summary>
+        private static void LoadHouses() {
+            //The whole process is done inside the try catch block in case there is any problems with the file path or the file itself
+            try {
+                //The json data from the txt file is read into a string
+                housesJsonFile = File.ReadAllText(filePath);
+                //This is then used to rebuild the list of houses and their contents
+                houses = JsonSerializer.Deserialize<List<House>>(housesJsonFile);
+
+            } catch (DirectoryNotFoundException) {
+                //This occurs if the path to the file is not valid, this probably is due to the path being hard coded for my personal computer
+                Console.WriteLine("Invalid file path, please check that the hard coded file path is written to find your hard drive and documents.");
+
+            } catch (FileNotFoundException) {
+                //This occurs if the file does not yet exist, e.g this is the first time running the program
+                Console.WriteLine("There is no file containing the houses, try saving some houses to the file and then load them in.");
+
+            } catch {
+
+                Console.WriteLine("There was an error when attempting to load the houses, please try again.");
 
             }
         }
