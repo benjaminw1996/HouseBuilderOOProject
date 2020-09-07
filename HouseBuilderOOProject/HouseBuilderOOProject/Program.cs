@@ -29,7 +29,7 @@ namespace HouseBuilderOOProject {
 
             //This loop is used to run the program until the user wishes to exit, this option is given at the end of the loop
             while (run) {
-                Console.WriteLine("\nHere are the actions you can perform - \n\t1. Create a new house.\n\t2. Remove a house.\n\t3. Save the houses.\n\t4. End the program.");
+                Console.WriteLine("\nHere are the actions you can perform - \n\t1. Create a new house.\n\t2. Remove a house.\n\t3. Display Houses.\n\t4. Save the houses.\n\t5. End the program.");
                 Console.Write("Please select an action to perform - ");
                 userResponse = Console.ReadLine();
 
@@ -43,10 +43,14 @@ namespace HouseBuilderOOProject {
                         break;
 
                     case "3":
-                        SaveHouses();
+                        DisplayHouses();
                         break;
 
                     case "4":
+                        SaveHouses();
+                        break;
+
+                    case "5":
                         Exit();
                         run = false;
                         break;
@@ -74,10 +78,32 @@ namespace HouseBuilderOOProject {
             string houseName;
             bool creatingRooms = true;
 
+            Console.WriteLine("\nCreating a new house...");
+
+            houseNumber = GetHouseNumber();
+
+            houseName = GetHouseName();
+
+            //A new house object is created using the values inputted by the user, this is then added to the list of houses*
+            House newHouse = new House(houseNumber, houseName);
+
+            while (creatingRooms) {
+                newHouse.CreateRoom();
+
+                Console.Write("\nWould you like to make another room? (y/n) ");
+                creatingRooms = Utilities.ContinueLoop(); ;
+            }
+
+            houses.Add(newHouse);
+        }
+
+        private static int GetHouseNumber() {
+            int houseNumber;
+
             //This loop is used to repeat the new house number prompt until the user inputs a valid number
             while (true) {
                 //The user is prompted to enter a number for the new house
-                Console.Write("\nPlease enter the house number of the new house: ");
+                Console.Write("\nPlease enter the house number you wish to use: ");
                 //A try catch block is used to parse the user input as a positive integer, if they dont they are informed they have entered an invalid number
                 try {
                     houseNumber = Int32.Parse(Console.ReadLine(), NumberStyles.None);
@@ -95,6 +121,12 @@ namespace HouseBuilderOOProject {
                 }
             }
 
+            return houseNumber;
+        }
+
+        private static string GetHouseName() {
+            string houseName;
+
             //This loop is used to repeat the new house name prompt until the user inputs a valid name
             while (true) {
                 //The user is prompted to enter a name for the new house
@@ -102,24 +134,14 @@ namespace HouseBuilderOOProject {
                 houseName = Console.ReadLine();
 
                 //The new name is checked against the existing names as duplicates arnt allowed
-                if (CheckInUse(0,houseName) == false) {
+                if (CheckInUse(0, houseName) == false) {
                     break;
                 } else {
                     Console.WriteLine("That house name is already in use.");
                 }
             }
 
-            //A new house object is created using the values inputted by the user, this is then added to the list of houses*
-            House newHouse = new House(houseNumber, houseName);
-
-            while (creatingRooms) {
-                newHouse.CreateRoom();
-
-                Console.Write("\nWould you like to make another room? (y/n) ");
-                creatingRooms = Utilities.ContinueLoop(); ;
-            }
-
-            houses.Add(newHouse);
+            return houseName;
         }
 
         /// <summary>
@@ -155,8 +177,22 @@ namespace HouseBuilderOOProject {
         /// <param name="houseNumber">Number of a house to find.</param>
         /// <param name="houseName">Name of a house to find.</param>
         /// <returns>The house object that was found in the list of houses.</returns>
-        private static House FindHouse(int houseNumber, string houseName) {
+        private static House FindHouse() {
             House tempHouse = null;
+            int houseNumber;
+            string houseName = "";
+
+            //The user is then prompted to enter the number of the house they wish to remove, the number is checked to ensure its a number and it repeats until a valid number is entered
+            while (true) {
+                Console.Write("Please enter the house number of the house you wish to select: ");
+
+                try {
+                    houseNumber = Int32.Parse(Console.ReadLine(), NumberStyles.None);
+                    break;
+                } catch {
+                    Console.WriteLine("That is not a valid house number.");
+                }
+            }
 
             //The list of houses is looped through, the given name or number is then compared to locate the desired house object
             foreach (House house in houses) {
@@ -178,8 +214,9 @@ namespace HouseBuilderOOProject {
         /// </summary>
         private static void RemoveHouse() {
             //Local variables to use within the method
-            int houseNumber;
             House houseToRemove;
+
+            Console.WriteLine("\nRemoving a house...");
             
             //The user is shown the list of numbers and names of the current houses
             Console.WriteLine("\nHere is the list of the current houses -");
@@ -188,26 +225,14 @@ namespace HouseBuilderOOProject {
                 Console.WriteLine("\tNumber " + house.HouseNumber + " " + house.HouseName +"\n");
             }
 
-            //The user is then prompted to enter the number of the house they wish to remove, the number is checked to ensure its a number and it repeats until a valid number is entered
-            while (true) {
-                Console.Write("Please enter the house number of the house you wish to remove - ");
-
-                try {
-                    houseNumber = Int32.Parse(Console.ReadLine(), NumberStyles.None);
-                    break;
-                } catch {
-                    Console.WriteLine("That is not a valid house number.");
-                }
-            }
-
             //The house which they wish to remove is located
-            houseToRemove = FindHouse(houseNumber, "");
+            houseToRemove = FindHouse();
             //If the house exists then it is removed and the user is informed it was successful, if it doesnt then the user is told no house could be removed
             if (houseToRemove != null) { 
                 houses.Remove(houseToRemove);
-                Console.WriteLine("\nThe house was successfully removed.\n");
+                Console.WriteLine("\nThe house was successfully removed.");
             } else {
-                Console.WriteLine("\nNo house was found to remove, please try again.\n");
+                Console.WriteLine("\nNo house was found to remove, please try again.");
             }
         }
 
@@ -215,9 +240,54 @@ namespace HouseBuilderOOProject {
         /// This method loops through the list of houses and displays the contents, each house displays its rooms which in turn display their furniture.
         /// </summary>
         private static void DisplayHouses() {
+            if (houses.Count > 0) {
+                foreach (House house in houses) {
+                    Console.WriteLine("Number " + house.HouseNumber + " " + house.HouseName + "\nThis house contains the following rooms - ");
+                    house.DisplayRooms();
+                }
+            } else {
+                Console.WriteLine("\nThere are no houses to display.");
+            }
+        }
+
+        private static void EditHouses() {
+            House houseToEdit;
+            string userResponse;
+
+            Console.WriteLine("\nEditing houses...");
+
+            //The user is shown the list of numbers and names of the current houses
+            Console.WriteLine("\nHere is the list of the current houses: ");
+
             foreach (House house in houses) {
-                Console.WriteLine("Number " + house.HouseNumber + " " + house.HouseName + "\nThis house contains the following rooms - ");
-                house.DisplayRooms();
+                Console.WriteLine("\tNumber " + house.HouseNumber + " " + house.HouseName + "\n");
+            }
+
+            houseToEdit = FindHouse();
+
+            if (houseToEdit != null) {
+
+                Console.WriteLine("What would you like to do with this house?\n\t1. Edit the house number.\n\t2. Edit the house name\n\t3. Edit the rooms.");
+                Console.Write("Please select an action to perform: ");
+                userResponse = Console.ReadLine();
+
+                switch (userResponse) {
+                    case "1":
+                        int newHouseNumber = GetHouseNumber();
+                        houseToEdit.HouseNumber = newHouseNumber;
+                        break;
+
+                    case "2":
+                        string newHouseName = GetHouseName();
+                        houseToEdit.HouseName = newHouseName;
+                        break;
+
+                    case "3":
+                        break;
+                }
+
+            } else {
+                Console.WriteLine("No house was found to edit, please try again.");
             }
         }
 
@@ -225,6 +295,8 @@ namespace HouseBuilderOOProject {
         /// This method converts the list of houses to a json file format, then saves that to a txt document in the project folder.
         /// </summary>
         private static void SaveHouses() {
+            Console.WriteLine("\nSaving houses...");
+
             //The JsonSerialiser converts the list of houses into json data that can then be used to rebuild the list of houses later on
             housesJsonFile = JsonSerializer.Serialize(houses);
 
