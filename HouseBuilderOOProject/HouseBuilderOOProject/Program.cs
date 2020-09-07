@@ -29,7 +29,7 @@ namespace HouseBuilderOOProject {
 
             //This loop is used to run the program until the user wishes to exit, this option is given at the end of the loop
             while (run) {
-                Console.WriteLine("\nHere are the actions you can perform - \n\t1. Create a new house.\n\t2. Remove a house.\n\t3. Display Houses.\n\t4. Save the houses.\n\t5. End the program.");
+                Console.WriteLine("\nHere are the actions you can perform - \n\t1. Create a new house.\n\t2. Remove a house.\n\t3. Edit houses.\n\t4. Display Houses.\n\t5. Save the houses.\n\t6. End the program.");
                 Console.Write("Please select an action to perform - ");
                 userResponse = Console.ReadLine();
 
@@ -43,14 +43,18 @@ namespace HouseBuilderOOProject {
                         break;
 
                     case "3":
-                        DisplayHouses();
+                        EditHouses();
                         break;
 
                     case "4":
-                        SaveHouses();
+                        DisplayHouses();
                         break;
 
                     case "5":
+                        SaveHouses();
+                        break;
+
+                    case "6":
                         Exit();
                         run = false;
                         break;
@@ -130,7 +134,7 @@ namespace HouseBuilderOOProject {
             //This loop is used to repeat the new house name prompt until the user inputs a valid name
             while (true) {
                 //The user is prompted to enter a name for the new house
-                Console.Write("Please enter the name of the new house: ");
+                Console.Write("\nPlease enter the name of the new house: ");
                 houseName = Console.ReadLine();
 
                 //The new name is checked against the existing names as duplicates arnt allowed
@@ -253,6 +257,7 @@ namespace HouseBuilderOOProject {
         private static void EditHouses() {
             House houseToEdit;
             string userResponse;
+            bool editing = true;
 
             Console.WriteLine("\nEditing houses...");
 
@@ -266,24 +271,34 @@ namespace HouseBuilderOOProject {
             houseToEdit = FindHouse();
 
             if (houseToEdit != null) {
+                Console.WriteLine("\nWhat would you like to edit about Number " + houseToEdit.HouseNumber + " " + houseToEdit.HouseName + "?\n\t1. The house number.\n\t2. The house name\n\t3. The rooms.");
+                
+                while (editing) {
+                    Console.Write("\nPlease select an action to perform: ");
+                    userResponse = Console.ReadLine();
 
-                Console.WriteLine("What would you like to do with this house?\n\t1. Edit the house number.\n\t2. Edit the house name\n\t3. Edit the rooms.");
-                Console.Write("Please select an action to perform: ");
-                userResponse = Console.ReadLine();
+                    switch (userResponse) {
+                        case "1":
+                            int newHouseNumber = GetHouseNumber();
+                            houseToEdit.HouseNumber = newHouseNumber;
+                            Console.WriteLine("The house number has been edited.");
 
-                switch (userResponse) {
-                    case "1":
-                        int newHouseNumber = GetHouseNumber();
-                        houseToEdit.HouseNumber = newHouseNumber;
-                        break;
+                            Console.Write("Would you like to continue editing this house? (y/n) - ");
+                            editing = Utilities.ContinueLoop();
+                            break;
 
-                    case "2":
-                        string newHouseName = GetHouseName();
-                        houseToEdit.HouseName = newHouseName;
-                        break;
+                        case "2":
+                            string newHouseName = GetHouseName();
+                            houseToEdit.HouseName = newHouseName;
+                            Console.WriteLine("The house name has been edited.");
 
-                    case "3":
-                        break;
+                            Console.Write("Would you like to continue editing this house? (y/n) - ");
+                            editing = Utilities.ContinueLoop();
+                            break;
+
+                        case "3":
+                            break;
+                    }
                 }
 
             } else {
