@@ -257,7 +257,9 @@ namespace HouseBuilderOOProject {
         private static void EditHouses() {
             House houseToEdit;
             string userResponse;
+            int roomNumber;
             bool editing = true;
+            bool editingRooms = true;
 
             Console.WriteLine("\nEditing houses...");
 
@@ -279,6 +281,8 @@ namespace HouseBuilderOOProject {
 
                     switch (userResponse) {
                         case "1":
+                            Console.WriteLine("\nEditing the house number...");
+
                             int newHouseNumber = GetHouseNumber();
                             houseToEdit.HouseNumber = newHouseNumber;
                             Console.WriteLine("The house number has been edited.");
@@ -288,6 +292,8 @@ namespace HouseBuilderOOProject {
                             break;
 
                         case "2":
+                            Console.WriteLine("\nEditing the house name...");
+
                             string newHouseName = GetHouseName();
                             houseToEdit.HouseName = newHouseName;
                             Console.WriteLine("The house name has been edited.");
@@ -297,6 +303,43 @@ namespace HouseBuilderOOProject {
                             break;
 
                         case "3":
+                            Console.WriteLine("\nEditing the rooms...");
+
+                            while (editingRooms) {
+                                houseToEdit.DisplayRooms();
+
+                                Console.Write("Would you like to add a new room? (y/n) - ");
+                                if (Utilities.ContinueLoop()) {
+                                    houseToEdit.CreateRoom();
+                                } else {
+
+                                    while (true) {
+                                        Console.Write("Please enter the number of the room you wish to edit: ");
+
+                                        try {
+                                            roomNumber = Int32.Parse(Console.ReadLine(), NumberStyles.None);
+                                            break;
+                                        } catch {
+                                            Console.WriteLine("That is not a valid house number.");
+                                        }
+                                    }
+
+                                    if (roomNumber > 0 || roomNumber < houseToEdit.Rooms.Count + 1) {
+
+                                        houseToEdit.EditRoom(roomNumber);
+
+                                    } else {
+                                        Console.WriteLine("No room with that number exists.");
+                                    }
+                                }
+
+                                Console.Write("Would you like to edit or create another room? (y/n) - ");
+                                editingRooms = Utilities.ContinueLoop();
+                            }
+                            break;
+
+                        default:
+                            Console.WriteLine("\nUnknown option selected!\n");
                             break;
                     }
                 }

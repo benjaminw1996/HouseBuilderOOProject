@@ -74,5 +74,22 @@ namespace HouseBuilderOOProject {
                 Console.WriteLine("\t\t" + furniture.FurnitureName);
             }
         }
+
+        public Furniture FindFurniture() {
+            Furniture tempFurniture = null;
+            string furnitureName;
+
+            Console.Write("Please enter the name of the furniture you wish to select: ");
+            furnitureName = Console.ReadLine();
+
+            foreach(Furniture furniture in m_Furniture) {
+                if (furniture.FurnitureName == furnitureName) {
+                    tempFurniture = furniture;
+                    break;
+                }
+            }
+
+            return tempFurniture;
+        }
     }
 }

@@ -64,15 +64,45 @@ namespace HouseBuilderOOProject {
         /// </summary>
         public void CreateRoom() {
             //Local variables to use throughout the function
-            bool run = true;
+            bool run;
+            RoomType roomType;
+            Room newRoom = null;
+
+            roomType = GetRoomType();
+
+            //If the room type is valid the room is made, if not the user is informed the room could not be created
+            if (roomType != RoomType.none) {
+                newRoom = new Room(roomType);
+
+                run = true;
+                while (run) {
+                    newRoom.CreateFurniture();
+
+                    Console.Write("Would you like to add more furniture to the room? (y/n) ");
+                    run = Utilities.ContinueLoop();
+                }
+
+            } else {
+                Console.WriteLine("New room could not be created, please try again.");
+            }
+
+            //If the new room is not null it is added to the list of rooms for the house
+            if(newRoom != null) {
+                AddRoom(newRoom);
+                Console.WriteLine("\nA new " + roomType + " was created and added to the house.\nThis room contains the following furniture -");
+                newRoom.DisplayFurniture();
+            }
+        }
+
+        private RoomType GetRoomType() {
             string userReply;
             RoomType roomType = RoomType.none;
-            Room newRoom = null;
+            bool run = true;
 
             //This loop will run until the user gives a valid RoomType for the new room
             while (run) {
                 //The user is prompted to select a type for the new room from the given list
-                Console.Write("Please select a room type for the new room; 1. Kitchen, 2. Living Room, 3. Bathroom, 4. Bedroom, 5. Dining Room - ");
+                Console.Write("Please select the type of room from this list; 1. Kitchen, 2. Living Room, 3. Bathroom, 4. Bedroom, 5. Dining Room - ");
                 userReply = Console.ReadLine();
 
                 //This switch case goes through all the possible options and creates a new room with the selected type
@@ -103,27 +133,64 @@ namespace HouseBuilderOOProject {
                 }
             }
 
-            //If the room type is valid the room is made, if not the user is informed the room could not be created
-            if (roomType != RoomType.none) {
-                newRoom = new Room(roomType);
+            return roomType;
+        }
 
-                run = true;
-                while (run) {
-                    newRoom.CreateFurniture();
+        public void EditRoom(int roomIndex) {
+            string userResponse;
+            RoomType newRoomType;
+            Furniture tempFurniture;
+            bool run;
 
-                    Console.Write("Would you like to add more furniture to the room? (y/n) ");
-                    run = Utilities.ContinueLoop();
-                }
+            Console.WriteLine("You are editing the " + rooms[roomIndex].M_RoomType + "\nThis room contains -");
+            rooms[roomIndex].DisplayFurniture();
 
-            } else {
-                Console.WriteLine("New room could not be created, please try again.");
-            }
+            Console.WriteLine("\nWhat would you like to edit about the room?\n\t1. Change the room type.\n\t2. Add furniture to the room.\n\t3. Remove furniture from the room\n\t4. Delete the room.");
+            userResponse = Console.ReadLine();
 
-            //If the new room is not null it is added to the list of rooms for the house
-            if(newRoom != null) {
-                AddRoom(newRoom);
-                Console.WriteLine("\nA new " + roomType + " was created and added to the house.\nThis room contains the following furniture -");
-                newRoom.DisplayFurniture();
+            switch (userResponse) {
+                case "1":
+                    Console.WriteLine("Editing the room type...");
+
+                    newRoomType = GetRoomType();
+                    rooms[roomIndex].M_RoomType = newRoomType;
+                    Console.WriteLine("The room type was changed.");
+                    break;
+
+                case "2":
+                    Console.WriteLine("Adding furniture to the room...");
+
+                    run = true;
+                    while (run) {
+                        rooms[roomIndex].CreateFurniture();
+
+                        Console.Write("Would you like to add more furniture to the room? (y/n) ");
+                        run = Utilities.ContinueLoop();
+                    }
+                    break;
+
+                case "3":
+                    Console.WriteLine("Removing furniture...");
+
+                    tempFurniture = rooms[roomIndex].FindFurniture();
+                    if (tempFurniture != null) {
+                        rooms[roomIndex].M_Furniture.Remove(tempFurniture);
+                        Console.WriteLine("The furniture was removed from the room.");
+                    } else {
+                        Console.WriteLine("No furniture with that name could be found to remove.");
+                    }
+                    break;
+
+                case "4":
+                    Console.WriteLine("Removing a room...");
+
+                    rooms.RemoveAt(roomIndex);
+                    Console.WriteLine("The selected room was removed.");
+                    break;
+
+                default:
+                    Console.WriteLine("\nUnknown option selected!\n");
+                    break;
             }
         }
 
@@ -133,7 +200,7 @@ namespace HouseBuilderOOProject {
         /// </summary>
         public void DisplayRooms() {
             foreach (Room room in rooms) {
-                Console.WriteLine("\t" + room.M_RoomType + "\n\tThat contains the following furniture - ");
+                Console.WriteLine("\t1. " + room.M_RoomType + "\n\tThat contains the following furniture - ");
                 room.DisplayFurniture();
             }
         }
