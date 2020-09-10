@@ -94,7 +94,13 @@ namespace HouseBuilderOOProject {
             }
         }
 
+        /// <summary>
+        /// This function is used to get a valid room type from the user,
+        /// this code was moved to its own function to be reused by the edit rooms function
+        /// </summary>
+        /// <returns>The room type selected by the user</returns>
         private RoomType GetRoomType() {
+            //Local variables to use in the function
             string userReply;
             RoomType roomType = RoomType.none;
             bool run = true;
@@ -133,25 +139,35 @@ namespace HouseBuilderOOProject {
                 }
             }
 
+            //returns the roomtype the user selected
             return roomType;
         }
 
+        /// <summary>
+        /// This method is used to edit the rooms of the house, the user will be given some options they can choose from.
+        /// These options allow them to change the room type, add or remove furniture to the room or delete the room entirely.
+        /// </summary>
+        /// <param name="roomIndex">The method is given the index for the room that is going to be edited.</param>
         public void EditRoom(int roomIndex) {
+            //Local variables to use in the function
             string userResponse;
             RoomType newRoomType;
             Furniture tempFurniture;
             bool run;
 
+            //The user is shown the room and its contents that they are editing
             Console.WriteLine("You are editing the " + rooms[roomIndex].M_RoomType + "\nThis room contains -");
             rooms[roomIndex].DisplayFurniture();
 
+            //The user is shown the options they can perform and prompted to select one
             Console.WriteLine("\nWhat would you like to edit about the room?\n\t1. Change the room type.\n\t2. Add furniture to the room.\n\t3. Remove furniture from the room\n\t4. Delete the room.");
             userResponse = Console.ReadLine();
 
+            //This switch case is used to process their response
             switch (userResponse) {
                 case "1":
                     Console.WriteLine("Editing the room type...");
-
+                    //This option is used to edit the room type, the GetRoomType method is called to get a new room type from the user
                     newRoomType = GetRoomType();
                     rooms[roomIndex].M_RoomType = newRoomType;
                     Console.WriteLine("The room type was changed.");
@@ -159,7 +175,7 @@ namespace HouseBuilderOOProject {
 
                 case "2":
                     Console.WriteLine("Adding furniture to the room...");
-
+                    //This option is used to add furniture to the room
                     run = true;
                     while (run) {
                         rooms[roomIndex].CreateFurniture();
@@ -171,7 +187,7 @@ namespace HouseBuilderOOProject {
 
                 case "3":
                     Console.WriteLine("Removing furniture...");
-
+                    //This option is used to remove furniture from the room. The user inputs the name of the furniture they want to remove, if it can be found then it is removed
                     tempFurniture = rooms[roomIndex].FindFurniture();
                     if (tempFurniture != null) {
                         rooms[roomIndex].M_Furniture.Remove(tempFurniture);
@@ -183,7 +199,7 @@ namespace HouseBuilderOOProject {
 
                 case "4":
                     Console.WriteLine("Removing a room...");
-
+                    //This option is used to remove the chosen room from the house
                     rooms.RemoveAt(roomIndex);
                     Console.WriteLine("The selected room was removed.");
                     break;

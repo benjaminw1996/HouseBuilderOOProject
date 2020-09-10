@@ -254,7 +254,12 @@ namespace HouseBuilderOOProject {
             }
         }
 
+        /// <summary>
+        /// This function allows the user to edit houses. They are given the option to add or delete new houses, or then edit existing ones.
+        /// The user is also given the option to edit rooms within the house and edit each rooms furniture, this is handled by a function within the house class.
+        /// </summary>
         private static void EditHouses() {
+            //Local variables to use within the function
             House houseToEdit;
             string userResponse;
             int roomNumber;
@@ -270,81 +275,97 @@ namespace HouseBuilderOOProject {
                 Console.WriteLine("\tNumber " + house.HouseNumber + " " + house.HouseName + "\n");
             }
 
+            //The house they wish to edit is found using the FindHouse method
             houseToEdit = FindHouse();
 
+            //If a house has been found then the code to edit it is run, if not the user is informed a house could not be found
             if (houseToEdit != null) {
+                //The user is shown the options they have when editing the house
                 Console.WriteLine("\nWhat would you like to edit about Number " + houseToEdit.HouseNumber + " " + houseToEdit.HouseName + "?\n\t1. The house number.\n\t2. The house name\n\t3. The rooms.");
                 
+                //This loop allows the user to keep editing a house without having to go back through from the main menu
                 while (editing) {
+                    //The user is promted to select an action to perform
                     Console.Write("\nPlease select an action to perform: ");
                     userResponse = Console.ReadLine();
 
+                    //This switch case is used to process their response
                     switch (userResponse) {
                         case "1":
                             Console.WriteLine("\nEditing the house number...");
-
+                            //This option is used to edit the house number, the user is prompted to enter a valid house number using the GetHouseNumber function
                             int newHouseNumber = GetHouseNumber();
                             houseToEdit.HouseNumber = newHouseNumber;
                             Console.WriteLine("The house number has been edited.");
-
+                            //The user is then asked if they wish to continue editing the house, if no then the loop ends
                             Console.Write("Would you like to continue editing this house? (y/n) - ");
+                            //The ContinueLoop function in the utilities class is used to process the users response and return a bool
                             editing = Utilities.ContinueLoop();
                             break;
 
                         case "2":
                             Console.WriteLine("\nEditing the house name...");
-
+                            //This option is used to edit the house name, the user is prompted to enter a valid house name using the GetHouseName function
                             string newHouseName = GetHouseName();
                             houseToEdit.HouseName = newHouseName;
                             Console.WriteLine("The house name has been edited.");
-
+                            //The user is then asked if they wish to continue editing the house, if no then the loop ends
                             Console.Write("Would you like to continue editing this house? (y/n) - ");
+                            //The ContinueLoop function in the utilities class is used to process the users response and return a bool
                             editing = Utilities.ContinueLoop();
                             break;
 
                         case "3":
                             Console.WriteLine("\nEditing the rooms...");
-
+                            //This option is used to edit the rooms, the first loop is used to allow the user to continually edit rooms without having to exit each time
                             while (editingRooms) {
+                                //The list of current rooms within the house is displayed to the user
                                 houseToEdit.DisplayRooms();
 
+                                //The initial option is to add a new room to the house, if they select yes then the CreateRoom function within the house is called
                                 Console.Write("Would you like to add a new room? (y/n) - ");
                                 if (Utilities.ContinueLoop()) {
                                     houseToEdit.CreateRoom();
                                 } else {
-
+                                    //If they said no then they are asked to select the room they wish to edit
                                     while (true) {
                                         Console.Write("Please enter the number of the room you wish to edit: ");
-
+                                        //This try catch is used to make sure the user enters a valid integer number for the desired room
                                         try {
                                             roomNumber = Int32.Parse(Console.ReadLine(), NumberStyles.None);
                                             break;
                                         } catch {
-                                            Console.WriteLine("That is not a valid house number.");
+                                            Console.WriteLine("That is not a valid number.");
                                         }
                                     }
 
+                                    //This if statement is used to make sure the number entered is within the constraints of the list
                                     if (roomNumber > 0 || roomNumber < houseToEdit.Rooms.Count + 1) {
-
+                                        //The edit room function within the house is then called allowing the user to edit the specific house
+                                        roomNumber --;
                                         houseToEdit.EditRoom(roomNumber);
 
                                     } else {
+                                        //If the number was not within the size of the list then the user is informed that no room exists with that number
                                         Console.WriteLine("No room with that number exists.");
                                     }
                                 }
 
+                                //The user is asked if they wish to edit or create another room, if not then the loop ends
                                 Console.Write("Would you like to edit or create another room? (y/n) - ");
                                 editingRooms = Utilities.ContinueLoop();
                             }
                             break;
 
                         default:
+                            //If an unkown option was slected then the user is informed of this 
                             Console.WriteLine("\nUnknown option selected!\n");
                             break;
                     }
                 }
 
             } else {
+                //If the house the user searched for to edit is not found, they are informed and asked to try again
                 Console.WriteLine("No house was found to edit, please try again.");
             }
         }
