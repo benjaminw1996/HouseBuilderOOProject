@@ -84,9 +84,9 @@ namespace HouseBuilderOOProject {
 
             Console.WriteLine("\nCreating a new house...");
 
-            houseNumber = GetHouseNumber();
+            houseNumber = InputHouseNumber();
 
-            houseName = GetHouseName();
+            houseName = InputHouseName();
 
             //A new house object is created using the values inputted by the user, this is then added to the list of houses*
             House newHouse = new House(houseNumber, houseName);
@@ -101,7 +101,7 @@ namespace HouseBuilderOOProject {
             houses.Add(newHouse);
         }
 
-        private static int GetHouseNumber() {
+        private static int InputHouseNumber() { 
             int houseNumber;
 
             //This loop is used to repeat the new house number prompt until the user inputs a valid number
@@ -128,7 +128,7 @@ namespace HouseBuilderOOProject {
             return houseNumber;
         }
 
-        private static string GetHouseName() {
+        private static string InputHouseName() { 
             string houseName;
 
             //This loop is used to repeat the new house name prompt until the user inputs a valid name
@@ -294,7 +294,7 @@ namespace HouseBuilderOOProject {
                         case "1":
                             Console.WriteLine("\nEditing the house number...");
                             //This option is used to edit the house number, the user is prompted to enter a valid house number using the GetHouseNumber function
-                            int newHouseNumber = GetHouseNumber();
+                            int newHouseNumber = InputHouseNumber();
                             houseToEdit.HouseNumber = newHouseNumber;
                             Console.WriteLine("The house number has been edited.");
                             //The user is then asked if they wish to continue editing the house, if no then the loop ends
@@ -306,7 +306,7 @@ namespace HouseBuilderOOProject {
                         case "2":
                             Console.WriteLine("\nEditing the house name...");
                             //This option is used to edit the house name, the user is prompted to enter a valid house name using the GetHouseName function
-                            string newHouseName = GetHouseName();
+                            string newHouseName = InputHouseName();
                             houseToEdit.HouseName = newHouseName;
                             Console.WriteLine("The house name has been edited.");
                             //The user is then asked if they wish to continue editing the house, if no then the loop ends

@@ -68,7 +68,7 @@ namespace HouseBuilderOOProject {
             RoomType roomType;
             Room newRoom = null;
 
-            roomType = GetRoomType();
+            roomType = InputRoomType();
 
             //If the room type is valid the room is made, if not the user is informed the room could not be created
             if (roomType != RoomType.none) {
@@ -99,7 +99,7 @@ namespace HouseBuilderOOProject {
         /// this code was moved to its own function to be reused by the edit rooms function
         /// </summary>
         /// <returns>The room type selected by the user</returns>
-        private RoomType GetRoomType() {
+        private RoomType InputRoomType() {
             //Local variables to use in the function
             string userReply;
             RoomType roomType = RoomType.none;
@@ -168,7 +168,7 @@ namespace HouseBuilderOOProject {
                 case "1":
                     Console.WriteLine("Editing the room type...");
                     //This option is used to edit the room type, the GetRoomType method is called to get a new room type from the user
-                    newRoomType = GetRoomType();
+                    newRoomType = InputRoomType();
                     rooms[roomIndex].M_RoomType = newRoomType;
                     Console.WriteLine("The room type was changed.");
                     break;
